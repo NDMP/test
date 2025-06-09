@@ -1,0 +1,40 @@
+package com.example.myapplication_6;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    EditText roll, name, marks;
+    TextView result;
+    DBHelper db;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        roll = findViewById(R.id.editRoll);
+        name = findViewById(R.id.editName);
+        marks = findViewById(R.id.editMarks);
+        result = findViewById(R.id.textResult);
+        db = new DBHelper(this);
+
+        findViewById(R.id.btnInsert).setOnClickListener(v ->
+                showMsg(db.insert(roll.getText().toString(), name.getText().toString(), marks.getText().toString()), "Inserted"));
+ 
+        findViewById(R.id.btnUpdate).setOnClickListener(v ->
+                showMsg(db.update(roll.getText().toString(), name.getText().toString(), marks.getText().toString()), "Updated"));
+
+        findViewById(R.id.btnDelete).setOnClickListener(v ->
+                showMsg(db.delete(roll.getText().toString()), "Deleted"));
+
+        findViewById(R.id.btnView).setOnClickListener(v ->
+                result.setText(db.viewAll()));
+    }
+
+    void showMsg(boolean success, String action) {
+        Toast.makeText(this, success ? action + " successfully" : action + " failed", Toast.LENGTH_SHORT).show();
+    }
+}
